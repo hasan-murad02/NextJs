@@ -7,6 +7,7 @@ on:
     branches:
       - main
 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,8 +20,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
-        # Optionally, set the registry URL for nvm if necessary
-        registry-url: 'https://nodejs.org/dist'
 
     - name: Install Dependencies
       run: npm install
