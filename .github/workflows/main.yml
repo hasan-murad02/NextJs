@@ -1,4 +1,3 @@
-
 name: Build & Deploy
 on:
   push:
@@ -7,7 +6,6 @@ on:
   pull_request:
     branches:
       - main
-
 
 jobs:
   deploy:
@@ -21,6 +19,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
+        # Optionally, set the registry URL for nvm if necessary
+        registry-url: 'https://nodejs.org/dist'
 
     - name: Install Dependencies
       run: npm install
@@ -46,5 +46,8 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
             cd ~/NextJs
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
             nvm use 18
+            npm install pm2 -g
             pm2 restart
