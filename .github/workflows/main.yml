@@ -7,7 +7,6 @@ on:
     branches:
       - main
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -26,27 +25,16 @@ jobs:
 
     - name: Build Files
       run: npm run build
-    
-    - name: Copy Files via SSH
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        key: ${{ secrets.SSH_KEY }}
-        username: ${{ secrets.SSH_USERNAME }}
-        source: ./
-        target: ~/NextJs/
-        rm: true
 
-    - name: SSH into the remote server and execute script
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-            cd ~/NextJs
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-            nvm use 18
-            npm install pm2 -g
-            pm2 restart NextJs
+    - name: SSH and Deploy
+      run: |
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -i ${{ secrets.SSH_KEY }} << EOF
+          cd ~/NextJs
+          rm -rf ./*
+          cp -r $GITHUB_WORKSPACE/* ./
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+          nvm use 18
+          npm install pm2 -g
+          pm2 restart NextJs
+        EOF
