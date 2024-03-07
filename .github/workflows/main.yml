@@ -28,7 +28,7 @@ jobs:
 
     - name: SSH and Deploy
       run: |
-        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -i ${{ secrets.SSH_KEY }} << EOF
+        ssh -i ${{ secrets.SSH_KEY }} ${{ secrets.SSH_USERNAME }}@ec2-${{ secrets.SSH_HOST }}.us-east-2.compute.amazonaws.com << EOF
           cd ~/NextJs
           rm -rf ./*
           cp -r $GITHUB_WORKSPACE/* ./
