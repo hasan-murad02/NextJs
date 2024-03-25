@@ -24,10 +24,7 @@ jobs:
 
     - name: Build Files
       run: npm run build
-   
-    - name: Echo SSH Key
-      run: echo ${{ secrets.SSH_KEY }}
-      
+         
     - name: Copy Files via SSH
       uses: appleboy/scp-action@v0.1.4
       with:
