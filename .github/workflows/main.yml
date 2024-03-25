@@ -19,9 +19,6 @@ jobs:
       with:
         node-version: 18
     
-    - name: Display Secrets
-      run: echo ${{ secrets.SSH_HOST }} ${{ secrets.SSH_KEY }} ${{ secrets.SSH_USERNAME }}
-
     - name: Install Dependencies
       run: npm install
 
